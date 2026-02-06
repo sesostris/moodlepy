@@ -25,7 +25,11 @@ def to_dict(data: Any, name: str = "") -> Any:
             val = to_dict(val)
             if isinstance(val, dict):
                 for key, value in val.items():
-                    out[f"{name}[{idx}][{key}]"] = val[key]
+                    if "[" in key:
+                        pos = key.index("[")
+                        out[f"{name}[{idx}][{key[:pos]}]{key[pos:]}"] = val[key]
+                    else:
+                        out[f"{name}[{idx}][{key}]"] = val[key]
             else:
                 out_key = name
                 # Check if data required name prefix
